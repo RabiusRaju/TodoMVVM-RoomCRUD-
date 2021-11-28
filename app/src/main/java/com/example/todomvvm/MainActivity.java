@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements CategoryListAdapt
 
     private void initViewModel() {
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+
         viewModel.getCategoryListObserver().observe(this, new Observer<List<Category>>() {
             @Override
             public void onChanged(List<Category> categories) {
