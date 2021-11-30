@@ -1,4 +1,4 @@
-package com.example.todomvvm;
+package com.example.todomvvm.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,7 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.todomvvm.db.Category;
+import com.example.todomvvm.R;
+import com.example.todomvvm.db.entity.Category;
 
 import java.util.List;
 

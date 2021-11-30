@@ -4,17 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.todomvvm.db.Items;
+import com.example.todomvvm.adapter.ItemListAdapter;
+import com.example.todomvvm.databinding.ActivityShowItemsListBinding;
+import com.example.todomvvm.db.entity.Items;
 import com.example.todomvvm.viewmodel.ShowItemListActivityViewModel;
 
 import java.util.List;
@@ -25,32 +24,31 @@ public class ShowItemsListActivity extends AppCompatActivity implements ItemList
     private ItemListAdapter itemListAdapter;
     private ShowItemListActivityViewModel viewModel;
     private Items itemToUpdate = null;
+    private ActivityShowItemsListBinding binding;
 
-    private TextView noResulttextView;
-    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_items_list);
+        binding = ActivityShowItemsListBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
         init();
     }
 
     public void init(){
-        category_id = getIntent().getIntExtra("category_id",0);
-        String categoryName = getIntent().getStringExtra("category_name");
+        Bundle bundle = getIntent().getExtras();
+        category_id = bundle.getInt("category_id",0);
+        String categoryName = bundle.getString("category_name");
 
         getSupportActionBar().setTitle(categoryName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        noResulttextView = findViewById(R.id.noResult);
 
-        final EditText addNewItemInput = findViewById(R.id.addNewItemInput);
-        ImageView saveButton = findViewById(R.id.saveButton);
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        binding.addNewItemInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String itemName = addNewItemInput.getText().toString();
+                String itemName = binding.addNewItemInput.getText().toString();
                 if(TextUtils.isEmpty(itemName)){
                     Toast.makeText(ShowItemsListActivity.this,"Enter Item Name", Toast.LENGTH_LONG).show();
                     return;
@@ -60,7 +58,6 @@ public class ShowItemsListActivity extends AppCompatActivity implements ItemList
                 }else {
                     updateNewItem(itemName);
                 }
-
             }
         });
         initRecyclerView();
@@ -74,23 +71,21 @@ public class ShowItemsListActivity extends AppCompatActivity implements ItemList
             @Override
             public void onChanged(List<Items> items) {
                 if(items == null){
-                    recyclerView.setVisibility(View.GONE);
-                    noResulttextView.setVisibility(View.VISIBLE);
+                    binding.recyclerView.setVisibility(View.GONE);
+                    binding.noResult.setVisibility(View.VISIBLE);
                 }else{
                     itemListAdapter.setItemsList(items);
-                    noResulttextView.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
+                    binding.recyclerView.setVisibility(View.GONE);
+                    binding.recyclerView.setVisibility(View.VISIBLE);
                 }
             }
         });
     }
 
     private void initRecyclerView(){
-        recyclerView = findViewById(R.id.recyclerView);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         itemListAdapter = new ItemListAdapter(this, this);
-        recyclerView.setAdapter(itemListAdapter);
+        binding.recyclerView.setAdapter(itemListAdapter);
     }
 
     public void saveNewItems(String itemName){

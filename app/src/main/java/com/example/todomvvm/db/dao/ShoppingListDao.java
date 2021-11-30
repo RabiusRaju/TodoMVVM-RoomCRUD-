@@ -1,10 +1,13 @@
-package com.example.todomvvm.db;
+package com.example.todomvvm.db.dao;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import com.example.todomvvm.db.entity.Category;
+import com.example.todomvvm.db.entity.Items;
 
 import java.util.List;
 

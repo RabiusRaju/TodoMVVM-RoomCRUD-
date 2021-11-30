@@ -6,7 +6,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.todomvvm.db.AppDatabase;
-import com.example.todomvvm.db.Items;
+import com.example.todomvvm.db.entity.Items;
 
 import java.util.List;
 

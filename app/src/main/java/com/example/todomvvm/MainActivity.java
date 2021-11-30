@@ -1,45 +1,45 @@
 package com.example.todomvvm;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.todomvvm.db.Category;
-import com.example.todomvvm.viewmodel.MainActivityViewModel;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
-import org.w3c.dom.Text;
+import com.example.todomvvm.adapter.CategoryListAdapter;
+import com.example.todomvvm.databinding.ActivityMainBinding;
+import com.example.todomvvm.db.entity.Category;
+import com.example.todomvvm.viewmodel.MainActivityViewModel;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements CategoryListAdapter.HandleCategoryClick {
 
     private MainActivityViewModel viewModel;
-    private TextView noResulttextView;
-    private RecyclerView recyclerView;
+
     private CategoryListAdapter categoryListAdapter;
     private Category categoryForEdit;
+
+    private ActivityMainBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         getSupportActionBar().setTitle("Shopping List");
-        noResulttextView = findViewById(R.id.noResult);
-        recyclerView = findViewById(R.id.recyclerView);
-        ImageView addNew = findViewById(R.id.addNewCategoryImageView);
-        addNew.setOnClickListener(new View.OnClickListener() {
+
+        binding.addNewCategoryImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAddCategoryDialog(false);
@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity implements CategoryListAdapt
     }
 
     private void initRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         categoryListAdapter = new CategoryListAdapter(this, this);
-        recyclerView.setAdapter(categoryListAdapter);
+        binding.recyclerView.setAdapter(categoryListAdapter);
     }
 
     private void initViewModel() {
@@ -63,13 +63,13 @@ public class MainActivity extends AppCompatActivity implements CategoryListAdapt
             @Override
             public void onChanged(List<Category> categories) {
                 if (categories == null) {
-                    noResulttextView.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
+                    binding.noResult.setVisibility(View.VISIBLE);
+                    binding.recyclerView.setVisibility(View.GONE);
                 } else {
                     // Show in the reyclerView
                     categoryListAdapter.setCategoryList(categories);
-                    recyclerView.setVisibility(View.VISIBLE);
-                    noResulttextView.setVisibility(View.GONE);
+                    binding.recyclerView.setVisibility(View.VISIBLE);
+                    binding.noResult.setVisibility(View.GONE);
                 }
             }
         });
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements CategoryListAdapt
         TextView createButton = dialogView.findViewById(R.id.createButton);
         TextView cancelButton = dialogView.findViewById(R.id.cancelButton);
 
-        if(isForEdit){
+        if (isForEdit) {
             createButton.setText("Update");
             enterCategoryInput.setText(categoryForEdit.categoryName);
         }
@@ -103,10 +103,10 @@ public class MainActivity extends AppCompatActivity implements CategoryListAdapt
                     return;
                 }
 
-                if(isForEdit){
+                if (isForEdit) {
                     categoryForEdit.categoryName = name;
                     viewModel.updateCategory(categoryForEdit);
-                }else {
+                } else {
                     //here we need to call view model.
                     viewModel.insertCategory(name);
                 }
@@ -121,9 +121,9 @@ public class MainActivity extends AppCompatActivity implements CategoryListAdapt
 
     @Override
     public void itemClick(Category category) {
-        Intent intent = new Intent(MainActivity.this,ShowItemsListActivity.class);
-        intent.putExtra("category_id",category.uid);
-        intent.putExtra("category_name",category.categoryName);
+        Intent intent = new Intent(MainActivity.this, ShowItemsListActivity.class);
+        intent.putExtra("category_id", category.uid);
+        intent.putExtra("category_name", category.categoryName);
         startActivity(intent);
     }
 
