@@ -1,7 +1,6 @@
 package com.example.todomvvm;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -16,7 +15,7 @@ import com.example.todomvvm.databinding.ActivityShowItemsListBinding;
 import com.example.todomvvm.db.entity.Items;
 import com.example.todomvvm.viewmodel.ShowItemListActivityViewModel;
 
-import java.util.List;
+import java.util.Objects;
 
 public class ShowItemsListActivity extends AppCompatActivity implements ItemListAdapter.HandleItemClick{
 
@@ -41,23 +40,20 @@ public class ShowItemsListActivity extends AppCompatActivity implements ItemList
         category_id = bundle.getInt("category_id",0);
         String categoryName = bundle.getString("category_name");
 
-        getSupportActionBar().setTitle(categoryName);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(categoryName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        binding.addNewItemInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String itemName = binding.addNewItemInput.getText().toString();
-                if(TextUtils.isEmpty(itemName)){
-                    Toast.makeText(ShowItemsListActivity.this,"Enter Item Name", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if(itemToUpdate == null){
-                    saveNewItems(itemName);
-                }else {
-                    updateNewItem(itemName);
-                }
+        binding.addNewItemInput.setOnClickListener(v -> {
+            String itemName = binding.addNewItemInput.getText().toString();
+            if(TextUtils.isEmpty(itemName)){
+                Toast.makeText(ShowItemsListActivity.this,"Enter Item Name", Toast.LENGTH_LONG).show();
+                return;
+            }
+            if(itemToUpdate == null){
+                saveNewItems(itemName);
+            }else {
+                updateNewItem(itemName);
             }
         });
         initRecyclerView();
@@ -67,17 +63,14 @@ public class ShowItemsListActivity extends AppCompatActivity implements ItemList
 
     private void initViewModel(){
         viewModel = new ViewModelProvider(this).get(ShowItemListActivityViewModel.class);
-        viewModel.getItemListObserver().observe(this, new Observer<List<Items>>() {
-            @Override
-            public void onChanged(List<Items> items) {
-                if(items == null){
-                    binding.recyclerView.setVisibility(View.GONE);
-                    binding.noResult.setVisibility(View.VISIBLE);
-                }else{
-                    itemListAdapter.setItemsList(items);
-                    binding.recyclerView.setVisibility(View.GONE);
-                    binding.recyclerView.setVisibility(View.VISIBLE);
-                }
+        viewModel.getItemListObserver().observe(this, items -> {
+            if(items == null){
+                binding.recyclerView.setVisibility(View.GONE);
+                binding.noResult.setVisibility(View.VISIBLE);
+            }else{
+                itemListAdapter.setItemsList(items);
+                binding.recyclerView.setVisibility(View.GONE);
+                binding.recyclerView.setVisibility(View.VISIBLE);
             }
         });
     }

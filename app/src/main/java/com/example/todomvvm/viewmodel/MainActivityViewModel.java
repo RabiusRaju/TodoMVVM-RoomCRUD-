@@ -12,8 +12,8 @@ import java.util.List;
 
 public class MainActivityViewModel extends AndroidViewModel {
 
-    private MutableLiveData<List<Category>> listOfCategory;
-    private AppDatabase appDatabase;
+    private final MutableLiveData<List<Category>> listOfCategory;
+    private final AppDatabase appDatabase;
 
     public MainActivityViewModel(Application application){
         super(application);

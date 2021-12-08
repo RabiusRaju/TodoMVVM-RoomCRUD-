@@ -17,9 +17,9 @@ import java.util.List;
 
 public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.MyViewHolder> {
 
-    private Context context;
+    private final Context context;
     private List<Category> categoryList;
-    private HandleCategoryClick clickListener;
+    private final HandleCategoryClick clickListener;
 
     public CategoryListAdapter(Context context, HandleCategoryClick clickListener) {
         this.context = context;
@@ -60,11 +60,11 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvCategoryName;
-        ImageView removeCategory;
-        ImageView editCategory;
+        final TextView tvCategoryName;
+        final ImageView removeCategory;
+        final ImageView editCategory;
 
         public MyViewHolder(View view) {
             super(view);

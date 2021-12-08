@@ -12,8 +12,8 @@ import java.util.List;
 
 public class ShowItemListActivityViewModel extends AndroidViewModel {
 
-    private MutableLiveData<List<Items>> listOfItems;
-    private AppDatabase appDatabase;
+    private final MutableLiveData<List<Items>> listOfItems;
+    private final AppDatabase appDatabase;
 
     public ShowItemListActivityViewModel(Application application){
         super(application);

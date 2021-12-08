@@ -20,6 +20,7 @@ import com.example.todomvvm.db.entity.Category;
 import com.example.todomvvm.viewmodel.MainActivityViewModel;
 
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements CategoryListAdapter.HandleCategoryClick {
 
@@ -37,14 +38,9 @@ public class MainActivity extends AppCompatActivity implements CategoryListAdapt
         View view = binding.getRoot();
         setContentView(view);
 
-        getSupportActionBar().setTitle("Shopping List");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Shopping List");
 
-        binding.addNewCategoryImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAddCategoryDialog(false);
-            }
-        });
+        binding.addNewCategoryImageView.setOnClickListener(v -> showAddCategoryDialog(false));
         initViewModel();
         initRecyclerView();
         viewModel.getAllCategoryList();

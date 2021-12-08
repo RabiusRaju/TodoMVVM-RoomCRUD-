@@ -19,9 +19,9 @@ import java.util.List;
 
 public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyViewHolder> {
 
-    private Context context;
+    private final Context context;
     private List<Items> itemsList;
-    private HandleItemClick clickListener;
+    private final HandleItemClick clickListener;
 
     public ItemListAdapter(Context context, HandleItemClick clickListener) {
         this.context = context;
@@ -68,11 +68,11 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
 
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvItemName;
-        ImageView removeCategory;
-        ImageView editCategory;
+        final TextView tvItemName;
+        final ImageView removeCategory;
+        final ImageView editCategory;
 
         public MyViewHolder(View view) {
             super(view);
